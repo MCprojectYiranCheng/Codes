@@ -1,0 +1,56 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/low_discrepancy.hpp
+iostream
+-
+cmath
+-
+climits
+-
+list
+-
+vector
+-
+algorithm
+-
+numeric
+-
+gsl/gsl_qrng.h
+-
+
+/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/main.cpp
+random
+-
+iostream
+-
+low_discrepancy.hpp
+/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/low_discrepancy.hpp
+
+/usr/local/include/gsl/gsl_errno.h
+stdio.h
+-
+errno.h
+-
+gsl/gsl_types.h
+-
+
+/usr/local/include/gsl/gsl_inline.h
+
+/usr/local/include/gsl/gsl_qrng.h
+stdlib.h
+-
+gsl/gsl_types.h
+-
+gsl/gsl_errno.h
+-
+gsl/gsl_inline.h
+-
+
+/usr/local/include/gsl/gsl_types.h
+
