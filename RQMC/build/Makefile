@@ -123,6 +123,33 @@ test_beta/fast:
 	$(MAKE) -f CMakeFiles/test_beta.dir/build.make CMakeFiles/test_beta.dir/build
 .PHONY : test_beta/fast
 
+src/low_discrepancy.o: src/low_discrepancy.cpp.o
+
+.PHONY : src/low_discrepancy.o
+
+# target to build an object file
+src/low_discrepancy.cpp.o:
+	$(MAKE) -f CMakeFiles/test_beta.dir/build.make CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.o
+.PHONY : src/low_discrepancy.cpp.o
+
+src/low_discrepancy.i: src/low_discrepancy.cpp.i
+
+.PHONY : src/low_discrepancy.i
+
+# target to preprocess a source file
+src/low_discrepancy.cpp.i:
+	$(MAKE) -f CMakeFiles/test_beta.dir/build.make CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.i
+.PHONY : src/low_discrepancy.cpp.i
+
+src/low_discrepancy.s: src/low_discrepancy.cpp.s
+
+.PHONY : src/low_discrepancy.s
+
+# target to generate assembly for a file
+src/low_discrepancy.cpp.s:
+	$(MAKE) -f CMakeFiles/test_beta.dir/build.make CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.s
+.PHONY : src/low_discrepancy.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -159,6 +186,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test_beta"
+	@echo "... src/low_discrepancy.o"
+	@echo "... src/low_discrepancy.i"
+	@echo "... src/low_discrepancy.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

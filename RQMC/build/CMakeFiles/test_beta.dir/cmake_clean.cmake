@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/test_beta.dir/src/main.cpp.o"
+  "CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.o"
   "../bin/test_beta.pdb"
   "../bin/test_beta"
 )
