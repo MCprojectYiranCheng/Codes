@@ -6,6 +6,20 @@
 
 #IncludeRegexTransform: 
 
+../include/Normal_distribution_LD.hpp
+iostream
+-
+cmath
+-
+list
+-
+vector
+-
+numeric
+-
+low_discrepancy.hpp
+../include/low_discrepancy.hpp
+
 ../include/low_discrepancy.hpp
 iostream
 -
@@ -31,6 +45,10 @@ iostream
 -
 low_discrepancy.hpp
 /Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/low_discrepancy.hpp
+Normal_distribution_LD.hpp
+/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/Normal_distribution_LD.hpp
+fstream
+-
 
 /usr/local/include/gsl/gsl_errno.h
 stdio.h

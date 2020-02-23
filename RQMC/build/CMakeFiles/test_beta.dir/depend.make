@@ -8,6 +8,7 @@ CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.o: /usr/local/include/gsl/gsl_i
 CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.o: /usr/local/include/gsl/gsl_qrng.h
 CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.o: /usr/local/include/gsl/gsl_types.h
 
+CMakeFiles/test_beta.dir/src/main.cpp.o: ../include/Normal_distribution_LD.hpp
 CMakeFiles/test_beta.dir/src/main.cpp.o: ../include/low_discrepancy.hpp
 CMakeFiles/test_beta.dir/src/main.cpp.o: ../src/main.cpp
 CMakeFiles/test_beta.dir/src/main.cpp.o: /usr/local/include/gsl/gsl_errno.h

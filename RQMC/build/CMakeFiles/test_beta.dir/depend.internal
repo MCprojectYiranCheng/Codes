@@ -9,6 +9,7 @@ CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.o
  /usr/local/include/gsl/gsl_qrng.h
  /usr/local/include/gsl/gsl_types.h
 CMakeFiles/test_beta.dir/src/main.cpp.o
+ ../include/Normal_distribution_LD.hpp
  ../include/low_discrepancy.hpp
  /Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/main.cpp
  /usr/local/include/gsl/gsl_errno.h
