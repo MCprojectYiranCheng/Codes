@@ -72,6 +72,7 @@ static int primes[255] = {
 struct halton {
     typedef std::vector<double> result_type;
     typedef std::vector<p_adic> list_p_adic;
+    halton() {}; // Add the default constructor
     halton(const list_p_adic &x) : nk(x), result(x.size()) {};
     halton(int dimension) : result(dimension) {
         for (int k = 0; k < dimension; k++)
@@ -89,50 +90,10 @@ struct halton {
         }
         return result;
     }
+
 protected:
     list_p_adic nk;
     result_type result;
-};
-
-struct faure {
-    typedef std::vector<double> result_type;
-    typedef std::vector< std::vector<int> > coeff_binom;
-    faure(int dimension, const p_adic &x)
-        : x(x), result(dimension), Comb(32, std::vector<int>(32,0))  {
-        for (int n = 0; n < 32; n++) {
-            Comb[0][n] = 1;
-        }
-        for (int k = 1; k < 32; k++) {
-            Comb[k][0] = 1;
-            for (int n = 1; n <= 32-k; n++){
-                Comb[k][n] = Comb[k][n-1] + Comb[k-1][n];
-            }
-        }
-        std::cout << x.p << std::endl;
-    };
-    result_type operator()() {
-        p_adic xi = x++;
-        result_type::iterator it = result.begin();
-        while (it != result.end()) {
-            *it++ = (double) xi;
-            xi = T(xi);
-        }
-        return result;
-    }
-    p_adic T(const p_adic &y) {
-        p_adic::coeff bk;
-        coeff_binom::const_iterator it_Comb = Comb.begin();
-        p_adic::coeff::const_iterator it = y.ak.begin();
-        while (it != y.ak.end()) {
-            bk.push_back(std::inner_product(it, y.ak.end(), (*it_Comb).begin(), 0) % y.p);
-            it++; it_Comb++;
-        }
-        return p_adic(bk, y.pk);
-    }
-protected:
-    p_adic x;
-    result_type result;
-    coeff_binom Comb;
 };
 
 struct sobol {
@@ -145,6 +106,7 @@ struct sobol {
         result = o.result;
     }
     // constructeur move uniquement en C++11
+    // move constructor 
     sobol(sobol && o) : dimension(o.dimension), q(o.q), result(std::move(o.result)) {
         o.dimension = 0;
         o.q = nullptr;
@@ -157,6 +119,7 @@ struct sobol {
         }
         return *this;
     }
+    //move assignment
     // operateur move uniquement en C++11
     sobol & operator=(sobol && o) {
         if (this != &o) {
@@ -178,6 +141,33 @@ protected:
     gsl_qrng * q;
     result_type result;
 };
+
+
+class shifted_halton{
+    typedef std::vector<double> result_type;
+    double shift;
+    halton hal;
+    result_type result;
+public:
+    //constructor of shifted halton, take the shift and dimension as the input
+    shifted_halton(double shift, int dimension) : shift(shift),result(dimension) {
+       hal = halton(dimension);
+    };
+    
+    //overload the operator () to return the shifted_halton series
+    result_type operator()() {
+        result_type halton_res = hal();
+        result_type::iterator ihal = halton_res.begin();
+        result_type::iterator ir = result.begin();
+        while (ihal != halton_res.end()) {
+            double tmp; // for saving the interger part of results
+            *ir++ = std::modf((shift+ (*ihal++)), &tmp);
+        }
+        return result;
+    }
+};
+
+
 
 
 #endif
