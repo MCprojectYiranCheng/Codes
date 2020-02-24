@@ -8,6 +8,8 @@ gradientDescent.o: gradientDescent.cpp gradientDescent.hpp
 
 asianOption.o: asianOption.cpp gradientDescent.cpp asa241.cpp gradientDescent.hpp asa241.hpp 
 	$(CC) -c asianOption.cpp gradientDescent.cpp asa241.cpp -std=c++17 
+asianOptionB.o: asianOptionB.cpp gradientDescent.cpp asa241.cpp gradientDescent.hpp asa241.hpp 
+	$(CC) -c asianOptionB.cpp gradientDescent.cpp asa241.cpp -std=c++17 
 
 simpleNormal.o: simpleNormal.cpp gradientDescent.cpp asa241.cpp gradientDescent.hpp asa241.hpp
 	$(CC) -c simpleNormal.cpp gradientDescent.cpp asa241.cpp -std=c++17
@@ -19,8 +21,9 @@ simpleNormal: simpleNormal.o gradientDescent.o asa241.o
 	
 asianOption: asianOption.o gradientDescent.o asa241.o
 	$(CC) asianOption.o gradientDescent.o asa241.o -o asianOption -std=c++17
-	
+asianOptionB: asianOptionB.o gradientDescent.o asa241.o
+	$(CC) asianOptionB.o gradientDescent.o asa241.o -o asianOptionB -std=c++17	
 clean: 
-	rm -f asianOption simpleNormal
+	rm -f asianOption asianOptionB simpleNormal
 	rm -f *.o
 	

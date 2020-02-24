@@ -6,10 +6,10 @@
 #include<random>
 #include"asa241.hpp"
 #include"gradientDescent.hpp"
-#define I 10
+#define I 100
 using namespace std;
 // type of random varaible
-typedef double VAR;
+typedef vector<double> VAR;
 // uniform distribution generator
 default_random_engine generator;
 uniform_real_distribution<double> distribution(0.0,1.0);
@@ -20,23 +20,38 @@ double transformToStratifiedNormal(double a,double b, double u){
     return r8_normal_01_cdf_inverse (v);
 };
 // generate stratified gaussian vector with respect to direction u  
-VAR generateStratifiedGaussian(double a,double b){
-    
+VAR generateStratifiedGaussianVector(double a,double b,VAR u){
+    int d=u.size();
+    assert(d>0);
+    double modU=sqrt(dot(u,u));
+    // normalize
+    u*=(1.0/modU);
+    modU=dot(u,u);
+    assert((modU-1.0<0.0000001)&(modU-1.0>-0.0000001));
     //generate Z
     double Z=distribution(generator);
     Z=transformToStratifiedNormal(a,b,Z);
-    return Z;
+    //generate Y
+    vector<double> Y;
+    for(int i=0;i<d;++i){
+        double yi=transformToStratifiedNormal(0.0,1.0, distribution(generator));
+        Y.push_back(yi);
+    }
+    vector<double> X=(u*Z);
+    X+=Y;
+    X-=(u*(dot(u,Y)));
+    return X;
 }
 
 // Functions for montecarlo 
-double standardDev(const vector<VAR>& x){
+double standardDev(const vector<VAR>& x,const VAR& u,double r,double T,int d,double k,double v, double S0){
     double m1=0.0;
     double m2=0.0;
     int N=x.size();
     assert(N>0);
     
     for (const VAR &item:x){
-        double fx=item;
+        double fx=newPayoff(item,u,r,T,d,k,v,S0);
         m1+=fx;
         m2+=fx*fx;
     }
@@ -45,7 +60,7 @@ double standardDev(const vector<VAR>& x){
     return sqrt(m2-m1*m1);
     
 }
-// adaptive calculation for mi by method a
+//  adaptive calculation for mi by method a
 void getNewmi_double(const vector<double> &p, const vector<double> &sigma,int delta,vector<double> &m){
     double sum=0.0;
     const int I_=p.size();
@@ -143,6 +158,7 @@ void getNewmi_double_b(const vector<double> &p, const vector<double> &sigma,int 
 }
 
 
+
 void upDateMi(const vector<double>& mi,vector<int>& Mi){
     const int I_=mi.size();
     assert(I_==Mi.size());
@@ -155,7 +171,7 @@ void upDateMi(const vector<double>& mi,vector<int>& Mi){
         Spast=Scurr;
     }
 }
-double calculateExpectation(const vector<vector<VAR> >& X,const vector<double> & p){
+double calculateExpectation(const vector<vector<VAR> >& X,const vector<double> & p,const VAR& u,double r,double T,int d,double k, double v, double S0 ){
     double m1=0.0;
     const int I_=X.size();
     assert((I_>0)&(I_==p.size()));
@@ -164,7 +180,7 @@ double calculateExpectation(const vector<vector<VAR> >& X,const vector<double> &
         assert(Ni>0);
         double s=0.0;
         for(const VAR &xi:X[i]){
-            s+=xi;
+            s+=newPayoff(xi,u,r,T,d,k,v,S0);
         }
         s=s/Ni*p[i];
         m1+=s;
@@ -180,80 +196,63 @@ double calculateSigmaStar(const vector<double> & p, const vector<double> & sigma
     return dot(p,sigma);
     
 }
-void montecarlo(const vector<int> &N,const vector<double> p,vector<double> &sigma, vector<double> &mi, vector<int> &Mi, vector< vector<VAR> > &X,char method){
-    assert((method=='A')|(method=='B'));
-
+void montecarlo(const vector<int> &N,const vector<double> p,const VAR &u, double S0,double r, double v, double T, double k, int d, vector<double> &sigma, vector<double> &mi, vector<int> &Mi, vector< vector<VAR> > &X){
     const int I_=p.size();
     const double pi_=1.0/((double)I_);
     const int NumIteration= N.size();
     assert(NumIteration>0);
     for(int nItr=1;nItr<NumIteration;++nItr){
-        if(method=='A'){
-             getNewmi_double(p, sigma,N[nItr]-N[nItr-1]-I_,mi);
-        }
-        else{
-            getNewmi_double_b(p,sigma,N[nItr]-N[nItr-1]-I_,mi,X);            
-        }
-
+        getNewmi_double_b(p, sigma,N[nItr]-N[nItr-1]-I_,mi,X);
         upDateMi( mi,Mi);
         for(int i=0;i<I_;++i){
             for(int j=0;j<Mi[i];++j){
                 double ai=pi_*i;
                 double bi=pi_*(i+1);
-                X[i].push_back(generateStratifiedGaussian(ai,bi));   
+                X[i].push_back(generateStratifiedGaussianVector(ai,bi,u));   
             }
         }
 
         for(int i=0;i<I_;++i){
-            sigma[i]=standardDev(X[i]);
+            sigma[i]=standardDev(X[i],u,r,T,d,k,v,S0);
             assert(sigma[i]>=0);
         }
     }
 }
 
 
-int testMCNormal(char method){
-    assert((method=='A')|(method=='B'));
+int main(){
+    double S0=50.,r=0.05,v=0.1,T=1.0,k=45.;
+    int d=16;
     const double pi_ = 1.0/I;
     std::vector<double>p(I,pi_);
     vector< vector<VAR> > X(I);
-    std::vector<int> N={0,300,1300,11300,31300};
+    std::vector<int> N={0,100000,500000,1000000};
     assert(N[0]==0);
     vector<double> sigma(I,1.0);
     vector<double> mi(I,0.0);
     vector<int> Mi(I,0);
-   
-    cout<<"start MonteCarlo by Mi update method:"<<method<<":"<<endl;
-    montecarlo(N,p,sigma,mi,Mi,X,method);
+    VAR u=getOptimalDirection(S0,r,v,T,k,d,10);
+    cout << "u:" << endl; 
+    for (const double &item:u){
+        cout<<item<<' ';
+    }
+    cout<<endl;
+
+
+    montecarlo(N,p,u,S0,r,v,T,k,d,sigma,mi,Mi,X);
     double sigmaStar=calculateSigmaStar(p,sigma);
-    double price=calculateExpectation(X,p);
+    double price=calculateExpectation(X,p,u,r,T,d,k,v,S0);
 
 
     cout<<"price:"<<price<<endl;
     cout<<"sigmaStar:"<<sigmaStar<<endl;
     cout<<"variance Star:"<<(sigmaStar*sigmaStar)<<endl;
-    // show stratification!
-    for(int i=0;i<I;++i){
-        double q=(double)(X[i].size())/N[N.size()-1];
-        cout<<"q"<<i<<" sample ratio:"<<q<<endl;
-    }
 
     
     return 0;
 
 
 }
-
-int main(){
-        
-    
-    testMCNormal('A');
-    testMCNormal('B');
-    return 0;
-
-
-}
-
 
 
 
