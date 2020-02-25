@@ -1,5 +1,5 @@
-#ifndef GRADIENTDESCENT
-#define GRADIENTDESCENT
+#ifndef ISANDVECTTOOLS
+#define ISANDVECTTOOLS
 
 #include<vector>
 #include<math.h>
@@ -20,14 +20,14 @@ double dot(const vector<double>& a,const vector<double>& b);
 // Calculate Asset Price S(X) on m timestamps based on X
 vector<double> calculateS(double S0,double r,double v,double T,int d,const vector<double> &X);
 
-// Initialize X0 such that g(X0)>0
-vector<double> initialize(double S0,double k, double T, double v,int d, double r);
+// Initialize a X0 making Call/Put Option  in the money
+vector<double> initialize(double S0,double k, double T, double v,int d, double r, bool CALL);
 
-// calculate payoff function g(S) based on asset price S(X) on m timestamps
-double g(double r,double T,int d,double k,const vector<double>& S);
+// Call/put option payoff function when in the money
+double g(double S0,double r,double v,double T,int d,double k,const vector<double>& X,bool CALL);
 
 // calculate gradient of g(S(X)) with respect to X
-vector<double> gradient(double T,double r,double v,int d,const vector<double>& S);
+vector<double> gradient(double T,double r,double v,int d,const vector<double>& S, bool CALL);
 
 // iteration methods for solving maxization problem of max(G(X)-0.5*X.dot(X), X in D) proposed in 
 // ASYMPTOTICALLY OPTIMAL IMPORTANCE SAMPLING AND STRATIFICATION FOR PRICING PATH-DEPENDENT OPTIONS
@@ -35,10 +35,9 @@ void updateOneStep(const double& gx,const vector<double>&grad,vector<double>& X)
 
 // solve the maximization problem by numItr of iterations (convergence could be achieved within 3 steps, so we suggest
 // to take numItr=5)
-vector<double> getOptimalDirection(double S0,double r,double v, double T, double k,int d, int numItr);
-
+vector<double> getOptimalDirection(double S0,double r,double v, double T, double k,int d, int numItr, bool CALL);
 //new Payoff function f(x,u) in the new measure
-double newPayoff(const vector<double>& X, const vector<double>& u,double r, double T,int d,double k,double v,double S0);
+double newPayoff(const vector<double>& X, const vector<double>& u,double r, double T,int d,double k,double v,double S0,bool CALL);
 
 
 

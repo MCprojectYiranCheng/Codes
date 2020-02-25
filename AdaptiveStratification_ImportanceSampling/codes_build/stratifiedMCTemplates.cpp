@@ -6,7 +6,7 @@
 #include<iostream>
 #include<random>
 #include<functional>
-#include"gradientDescent.hpp"
+#include "importanceSamplingAndVectorTools.hpp"
 #include "stratifiedMCTemplates.hpp"
 // This file contains implementations for undefined functions in "stratifiedMCTemplates.hpp"!
 

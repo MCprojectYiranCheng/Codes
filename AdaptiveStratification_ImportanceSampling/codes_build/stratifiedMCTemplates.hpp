@@ -38,14 +38,14 @@ double standardDev(const vector<VAR>& x,const function<double(VAR) >& payoff){
     int N=x.size();
     assert(N>0);
     
-    for (const VAR &item:x){
-        double fx=payoff(item);
+    for (int i=0;i<N;++i){
+        double fx=payoff(x[i]);
+        m1=double(i)/(double(i)+1.0)*m1+fx/(double(i)+1.0);
+        m2=double(i)/(double(i)+1.0)*m2+fx*fx/(double(i)+1.0);
         //newPayoff(item,u,r,T,d,k,v,S0);
-        m1+=fx;
-        m2+=fx*fx;
+
     }
-    m1/=N;
-    m2/=N;
+
     return sqrt(m2-m1*m1);
     
 }
@@ -141,11 +141,11 @@ double calculateExpectation(const vector<vector<VAR> >& X,const vector<double> &
         int Ni=X[i].size();
         assert(Ni>0);
         double s=0.0;
-        for(const VAR &xi:X[i]){
-            s+=payoff(xi);
+        for(int j=0;j<Ni;++j){
+            s=double(j)/(1.0+double(j))*s+payoff(X[i][j])/(1.0+double(j));
             //newPayoff(xi,u,r,T,d,k,v,S0);
         }
-        s=s/Ni*p[i];
+        s=s*p[i];
         m1+=s;
     }
     return m1;
@@ -160,7 +160,8 @@ void montecarloStratified(const vector<int> &N,const vector<double> p, vector<do
     assert((method=='A')|(method=='B'));
     cout<<"current updating method is:"<<method<<endl;
     // uniform distribution generator
-    default_random_engine generator;
+    random_device rd;
+    default_random_engine generator(rd());
     uniform_real_distribution<double> distribution(0.0,1.0);
     // start iterations
     const int I_=p.size();

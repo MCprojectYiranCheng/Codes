@@ -6,7 +6,7 @@
 #include<random>
 #include<functional>
 #include"asa241.hpp"
-#include"gradientDescent.hpp"
+#include"importanceSamplingAndVectorTools.hpp"
 #include"stratifiedMCTemplates.hpp"
 #define I 100
 using namespace std;
@@ -44,10 +44,12 @@ VAR generateStratifiedGaussianVector(default_random_engine& generator,uniform_re
 }
 
 
-int main(){
+int testMC(){
     // Initialize parameters 
-    double S0=50.,r=0.05,v=0.1,T=1.0,k=45.;
-    int d=16;
+    const double S0=50.,r=0.05,v=0.1,T=1.0,k=55.;
+    const int d=16;
+    bool CALL=false;
+
     const double pi_ = 1.0/I;
     std::vector<double>p(I,pi_);
     vector< vector<VAR> > X(I);
@@ -57,10 +59,11 @@ int main(){
     vector<double> mi(I,0.0);
     vector<int> Mi(I,0);
     // get optimal importance sampling shift
-    VAR u=getOptimalDirection(S0,r,v,T,k,d,10);
+    VAR u=getOptimalDirection(S0,r,v,T,k,d,15,CALL);
     cout << "Optimal Importance Sampling Shift u:" << endl; 
     // payoff function and Random generation Algo
-    const function<double(VAR)>& payoff=bind(newPayoff,placeholders::_1,u,r,T,d,k,v,S0);
+    
+    const function<double(VAR)>& payoff=bind(newPayoff,placeholders::_1,u,r,T,d,k,v,S0,CALL);
     const StratifiedRandomGenerateAlgo &generateRandomAlgo=bind(generateStratifiedGaussianVector,placeholders::_1,placeholders::_2,placeholders::_3,placeholders::_4,u);
 
 
@@ -81,6 +84,103 @@ int main(){
     return 0;
 
 
+}
+
+int test1(){
+    // Initialize parameters 
+    const double S0=50.,r=0.05,v=0.1,T=1.0,k=55.;
+    const int d=16;
+    bool CALL=false;
+
+    vector<VAR> X;
+    
+   // get optimal importance sampling shift
+    VAR u=getOptimalDirection(S0,r,v,T,k,d,15,CALL);
+    cout << "Optimal Importance Sampling Shift u:" << endl; 
+    // payoff function and Random generation Algo
+    
+    const function<double(VAR)>& payoff=bind(newPayoff,placeholders::_1,u,r,T,d,k,v,S0,CALL);
+    for (const double &item:u){
+        cout<<item<<' ';
+    }
+    cout<<endl;
+    std::default_random_engine de(time(0)); //seed
+    std::normal_distribution<double> nd(0, 1); //mean followed by stdiv 
+    int N=1000000;
+    for(int i=0;i<N;++i){
+        vector<double>xi;
+        for(int j=0;j<d;++j){
+            xi.push_back(nd(de));
+        }
+        X.push_back(xi);
+    }
+    double price=0.0;
+    for(int i=0;i<N;++i){
+        //for(const double& x:X[i]){
+        //    cout<<x<<"__";
+        //}
+        //cout<<price<<" ";
+        price+=payoff(X[i]);
+    }
+    price/=N;
+    cout<<"price estimator:"<<price<<endl;
+   
+    
+    return 0;
+
+
+}
+
+int test2(){
+    // Initialize parameters 
+    const double S0=50.,r=0.05,v=0.1,T=1.0,k=55.;
+    const int d=16;
+    bool CALL=false;
+
+    vector<VAR> X;
+    
+   // get optimal importance sampling shift
+    VAR u(d,0.0);
+    //VAR u=getOptimalDirection(S0,r,v,T,k,d,15,CALL);
+    cout << "Optimal Importance Sampling Shift u:" << endl; 
+    // payoff function and Random generation Algo
+    
+    const function<double(VAR)>& payoff=bind(newPayoff,placeholders::_1,u,r,T,d,k,v,S0,CALL);
+    for (const double &item:u){
+        cout<<item<<' ';
+    }
+    cout<<endl;
+    std::default_random_engine de(time(0)); //seed
+    std::uniform_real_distribution<double> nd(0, 1); //mean followed by stdiv 
+    int N=1000000;
+    for(int i=0;i<N;++i){
+        vector<double>xi;
+        for(int j=0;j<d;++j){
+            xi.push_back(transformToStratifiedNormal(0.0,1.0,nd(de)));
+        }
+        X.push_back(xi);
+    }
+    double price=0.0;
+    for(int i=0;i<N;++i){
+        //for(const double& x:X[i]){
+        //    cout<<x<<"__";
+        //}
+        //cout<<price<<" ";
+        price=double(i)/(double(i)+1.0)*price+payoff(X[i])/(double(i)+1.0);
+    }
+    
+    cout<<"price estimator:"<<price<<endl;
+   
+    
+    return 0;
+
+
+}
+
+int main(){
+test1();
+test2();
+testMC();
 }
 
 
