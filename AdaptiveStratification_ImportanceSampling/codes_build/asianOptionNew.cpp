@@ -179,7 +179,7 @@ int test2(){
 int main(){
 //test1();
 //test2();
-testMC('A',true,55,16);
+testMC('A',false,55,16);
 }
 
 
