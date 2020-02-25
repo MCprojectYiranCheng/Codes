@@ -7,7 +7,7 @@
 #include<functional>
 #include"asa241.hpp"
 #include"importanceSamplingAndVectorTools.hpp"
-#include"stratifiedMCTemplates.hpp"
+#include"stratifiedMCClass.hpp"
 #define I 100
 using namespace std;
 // type of random varaible
@@ -44,20 +44,16 @@ VAR generateStratifiedGaussianVector(default_random_engine& generator,uniform_re
 }
 
 
-int testMC(){
+int testMC(const char& method,const bool CALL,const int& k,const int& d){
     // Initialize parameters 
-    const double S0=50.,r=0.05,v=0.1,T=1.0,k=55.;
-    const int d=16;
-    bool CALL=false;
+    const double S0=50.,r=0.05,v=0.1,T=1.0;
+        
 
     const double pi_ = 1.0/I;
     std::vector<double>p(I,pi_);
     vector< vector<VAR> > X(I);
     std::vector<int> N={0,100000,500000,1000000};
     assert(N[0]==0);
-    vector<double> sigma(I,1.0);
-    vector<double> mi(I,0.0);
-    vector<int> Mi(I,0);
     // get optimal importance sampling shift
     VAR u=getOptimalDirection(S0,r,v,T,k,d,15,CALL);
     cout << "Optimal Importance Sampling Shift u:" << endl; 
@@ -71,10 +67,13 @@ int testMC(){
         cout<<item<<' ';
     }
     cout<<endl;
-    montecarloStratified(N,p,sigma,mi,Mi,X,payoff,generateRandomAlgo,'A');
-    double sigmaStar=calculateSigmaStar(p,sigma);
-    double price=calculateExpectation(X,p,payoff);
+    // MC
+    auto asmc=AdaptiveStratifiedMC<VAR> (I,N,p,payoff,generateRandomAlgo,method);
+    asmc.montecarloStratified();
 
+    // estimators
+    double sigmaStar=asmc.calculateSigmaStar();
+    double price=asmc.calculateExpectation();
 
     cout<<"price estimator:"<<price<<endl;
     cout<<"sigmaStar:"<<sigmaStar<<endl;
@@ -178,9 +177,9 @@ int test2(){
 }
 
 int main(){
-test1();
-test2();
-testMC();
+//test1();
+//test2();
+testMC('A',true,55,16);
 }
 
 

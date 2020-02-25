@@ -6,7 +6,7 @@
 #include<random>
 #include"asa241.hpp"
 #include"importanceSamplingAndVectorTools.hpp"
-#include"stratifiedMCTemplates.hpp"
+#include"stratifiedMCClass.hpp"
 #define I 10
 using namespace std;
 // type of random varaible
@@ -34,19 +34,19 @@ int testMCNormal(char method){
     assert((method=='A')|(method=='B'));
     const double pi_ = 1.0/I;
     std::vector<double>p(I,pi_);
-    vector< vector<VAR> > X(I);
     std::vector<int> N={0,300,1300,11300,31300};
     assert(N[0]==0);
-    vector<double> sigma(I,1.0);
-    vector<double> mi(I,0.0);
-    vector<int> Mi(I,0);
     // PAYOFF 
     const function<double(VAR)> payoff=[](VAR x){return x;};
-    cout<<"start MonteCarlo by Mi update method:"<<method<<":"<<endl;
 
-    montecarloStratified<VAR>(N,p,sigma,mi,Mi,X,payoff,generateStratifiedGaussian,method);
-    double sigmaStar=calculateSigmaStar(p,sigma);
-    double price=calculateExpectation(X,p,payoff);
+    // Start MC
+    cout<<"start MonteCarlo by Mi update method:"<<method<<":"<<endl;
+    auto mcAS=AdaptiveStratifiedMC<VAR>(I,N,p,payoff,generateStratifiedGaussian,method);
+    mcAS.montecarloStratified();
+    
+    // estimators:
+    double sigmaStar=mcAS.calculateSigmaStar();
+    double price=mcAS.calculateExpectation();
 
 
     cout<<"price:"<<price<<endl;
@@ -54,7 +54,7 @@ int testMCNormal(char method){
     cout<<"variance Star:"<<(sigmaStar*sigmaStar)<<endl;
     // show stratification!
     for(int i=0;i<I;++i){
-        double q=(double)(X[i].size())/N[N.size()-1];
+        double q=(double)(mcAS.get_X()[i].size())/N[N.size()-1];
         cout<<"q"<<i<<" sample ratio:"<<q<<endl;
     }
 
@@ -65,8 +65,7 @@ int testMCNormal(char method){
 }
 
 int main(){
-        
-    
+       
     testMCNormal('A');
     testMCNormal('B');
     return 0;
