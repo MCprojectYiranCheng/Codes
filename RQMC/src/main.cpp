@@ -3,6 +3,7 @@
 #include "low_discrepancy.hpp"
 #include "Normal_distribution_LD.hpp"
 #include <fstream>
+#include <string>
 
 int main() {
     std::random_device rd;
@@ -16,7 +17,7 @@ int main() {
     
      
     double x = 0;//U(gen);
-    int dimension = 2;
+    int dimension = 100;
     shifted_halton sh(x, dimension+1);
    // std::cout<<"The shifted halton series of dimension "<< 8 <<" are as follows: "<< std::endl;
     
@@ -25,29 +26,41 @@ int main() {
     
     int N = 10000;
     
+    
+    double* xg = new double[dimension];
+    std::fill_n(xg,dimension,0);
+
     std::ofstream myfile;
     myfile.open ("../data/example.csv");
-    myfile << "x1,x2\n";
+    //myfile << "x1,x2\n";
+    
+    for(int i=0; i<dimension-1; i++){
+        myfile <<"x"<<i<<",";
+    }
+    myfile <<"x"<<dimension-1<< "\n";
+    
     for(int i=0; i<N; i++){
-         
         Gaussian_lds gaussian(dimension, sh());
         std::vector<double> res = gaussian();  
-        myfile <<res[0]<<"," <<res[1]<<"\n";
-    /*    
-        for (std::vector<double>::iterator j= res.begin(); j<res.end();j++){
-             std::cout<<*j<<" ";
-         }*/
-        //std::cout<<std::endl;
-        std::transform (res.begin(), res.end(), mean.begin(), mean.begin(), std::plus<double>());
-        
-    }   
-    
-    myfile.close();
-    
-     for (std::vector<double>::iterator j= mean.begin(); j<mean.end();j++){
-             std::cout<<*j/N<<" ";
+        for (int j=0; j< dimension; j++){
+             xg[j]+= res[j];
+             myfile << res[j];
+             if(j< dimension-1)myfile <<",";
+             else myfile <<"\n";
          }
+        //std::cout<<std::endl;
+        //std::transform (res.begin(), res.end(), mean.begin(), mean.begin(), std::plus<double>());
+     }   
+    
+     myfile.close();
+    
+     std::cout<<"The mean of the generated guassian: " <<std::endl;
+     for (int i=0; i< dimension; i++){
+             std::cout<<xg[i]/N<<" ";
+         }
+     std::cout<<std::endl;
      
+     delete[] xg;
 //      int k = 10;
 //      halton p(2);
 //      
