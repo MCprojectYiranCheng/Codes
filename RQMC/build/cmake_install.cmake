@@ -1,4 +1,4 @@
-# Install script for directory: /Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC
+# Install script for directory: /Users/yiranchen/Documents/GitHub/Codes/RQMC
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/yiranchen/Documents/GitHub/Codes/RQMC/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
