@@ -97,7 +97,7 @@ int main() {
         RQMC_Gaussian pricing(100,N,d[i],f2,gen);
         pricing();
         std::cout << "Pricing results are: \n" << pricing <<'\n';
-        std::string out_dir = "../data/Call_"+std::to_string(d[i])+"_"+std::to_string(K[j])+".csv";
+        std::string out_dir = "../data/Call_"+std::to_string(d[i])+"_"+std::to_string((int)K[j])+".csv";
         to_csv(out_dir,pricing);
     }
   }

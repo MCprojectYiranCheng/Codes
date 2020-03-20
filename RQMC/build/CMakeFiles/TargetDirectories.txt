@@ -1,9 +1,0 @@
-<<<<<<< HEAD
-/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/build/CMakeFiles/rebuild_cache.dir
-/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/build/CMakeFiles/edit_cache.dir
-/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/build/CMakeFiles/test_beta.dir
-=======
-/Users/yiranchen/Documents/GitHub/Codes/RQMC/build/CMakeFiles/rebuild_cache.dir
-/Users/yiranchen/Documents/GitHub/Codes/RQMC/build/CMakeFiles/edit_cache.dir
-/Users/yiranchen/Documents/GitHub/Codes/RQMC/build/CMakeFiles/test_beta.dir
->>>>>>> 86f7884ed194a0e4f8b6526d60ea0d346e4e8f9f
