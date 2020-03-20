@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <numeric>
 #include <gsl/gsl_qrng.h>
+#include <cassert>
 
 class p_adic {
 public:
@@ -106,7 +107,7 @@ struct sobol {
         result = o.result;
     }
     // constructeur move uniquement en C++11
-    // move constructor 
+    // move constructor
     sobol(sobol && o) : dimension(o.dimension), q(o.q), result(std::move(o.result)) {
         o.dimension = 0;
         o.q = nullptr;
@@ -136,7 +137,7 @@ struct sobol {
         gsl_qrng_get(q, &(*result.begin()));
         return result;
     }
-protected: 
+protected:
     int dimension;
     gsl_qrng * q;
     result_type result;
@@ -145,23 +146,26 @@ protected:
 
 class shifted_halton{
     typedef std::vector<double> result_type;
-    double shift;
+    result_type shift;
     halton hal;
     result_type result;
 public:
     //constructor of shifted halton, take the shift and dimension as the input
-    shifted_halton(double shift, int dimension) : shift(shift),result(dimension) {
-       hal = halton(dimension);
+    shifted_halton(result_type shift, int dimension) : shift(shift),result(dimension) {
+      //std::cout<< "size is "<< shift.size()<<" dimension is "<< dimension<<std::endl;
+      assert(shift.size()==dimension);
+      hal = halton(dimension);
     };
-    
+
     //overload the operator () to return the shifted_halton series
     result_type operator()() {
         result_type halton_res = hal();
         result_type::iterator ihal = halton_res.begin();
         result_type::iterator ir = result.begin();
+        auto ishift = shift.begin();
         while (ihal != halton_res.end()) {
             double tmp; // for saving the interger part of results
-            *ir++ = std::modf((shift+ (*ihal++)), &tmp);
+            *ir++ = std::modf(((*ishift++)+ (*ihal++)), &tmp);
         }
         return result;
     }
