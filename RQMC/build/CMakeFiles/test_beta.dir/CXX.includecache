@@ -20,6 +20,7 @@ numeric
 low_discrepancy.hpp
 ../include/low_discrepancy.hpp
 
+<<<<<<< HEAD
 ../include/Randomized_MC.hpp
 iostream
 -
@@ -34,6 +35,8 @@ numeric
 cmath
 -
 
+=======
+>>>>>>> 86f7884ed194a0e4f8b6526d60ea0d346e4e8f9f
 ../include/low_discrepancy.hpp
 iostream
 -
@@ -51,15 +54,25 @@ numeric
 -
 gsl/gsl_qrng.h
 -
+<<<<<<< HEAD
 cassert
 -
 
 /Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/main.cpp
+=======
+
+/Users/yiranchen/Documents/GitHub/Codes/RQMC/src/low_discrepancy.cpp
+low_discrepancy.hpp
+/Users/yiranchen/Documents/GitHub/Codes/RQMC/src/low_discrepancy.hpp
+
+/Users/yiranchen/Documents/GitHub/Codes/RQMC/src/main.cpp
+>>>>>>> 86f7884ed194a0e4f8b6526d60ea0d346e4e8f9f
 random
 -
 iostream
 -
 low_discrepancy.hpp
+<<<<<<< HEAD
 /Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/low_discrepancy.hpp
 Normal_distribution_LD.hpp
 /Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/Normal_distribution_LD.hpp
@@ -75,6 +88,13 @@ cassert
 -
 math.h
 -
+=======
+/Users/yiranchen/Documents/GitHub/Codes/RQMC/src/low_discrepancy.hpp
+Normal_distribution_LD.hpp
+/Users/yiranchen/Documents/GitHub/Codes/RQMC/src/Normal_distribution_LD.hpp
+fstream
+-
+>>>>>>> 86f7884ed194a0e4f8b6526d60ea0d346e4e8f9f
 
 /usr/local/include/gsl/gsl_errno.h
 stdio.h

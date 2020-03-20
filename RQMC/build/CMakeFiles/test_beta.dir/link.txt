@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 /Library/Developer/CommandLineTools/usr/bin/c++  -std=c++11 -Wall -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/test_beta.dir/src/main.cpp.o CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.o CMakeFiles/test_beta.dir/src/Randomized_MC.cpp.o  -o ../bin/test_beta /usr/local/lib/libgsl.dylib /usr/local/lib/libgslcblas.dylib 
+=======
+/Library/Developer/CommandLineTools/usr/bin/c++  -std=c++11 -Wall -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/test_beta.dir/src/main.cpp.o CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.o  -o ../bin/test_beta /usr/local/lib/libgsl.dylib /usr/lib/libcblas.dylib 
+>>>>>>> 86f7884ed194a0e4f8b6526d60ea0d346e4e8f9f

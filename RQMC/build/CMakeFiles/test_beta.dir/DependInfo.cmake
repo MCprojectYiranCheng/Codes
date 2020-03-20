@@ -4,9 +4,14 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+<<<<<<< HEAD
   "/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/Randomized_MC.cpp" "/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/build/CMakeFiles/test_beta.dir/src/Randomized_MC.cpp.o"
   "/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/low_discrepancy.cpp" "/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/build/CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.o"
   "/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/src/main.cpp" "/Users/shancheng/Desktop/El Karoui/PAGES/Project/Codes/RQMC/build/CMakeFiles/test_beta.dir/src/main.cpp.o"
+=======
+  "/Users/yiranchen/Documents/GitHub/Codes/RQMC/src/low_discrepancy.cpp" "/Users/yiranchen/Documents/GitHub/Codes/RQMC/build/CMakeFiles/test_beta.dir/src/low_discrepancy.cpp.o"
+  "/Users/yiranchen/Documents/GitHub/Codes/RQMC/src/main.cpp" "/Users/yiranchen/Documents/GitHub/Codes/RQMC/build/CMakeFiles/test_beta.dir/src/main.cpp.o"
+>>>>>>> 86f7884ed194a0e4f8b6526d60ea0d346e4e8f9f
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
