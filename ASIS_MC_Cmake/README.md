@@ -1,10 +1,11 @@
-This part is the work on importance sampling + adaptive stratification.
+##This part is the work on importance sampling + adaptive stratification.
+
 1. Importance Sampling: Gradient Based Optimization for finding the optimal change of measure.
 2. Adaptive Stratification:
 3. Apply to toy example:Normal(0,1) and Asian Option Pricing.
 
 
-##### Important: How to compile and run?####
+##Important: How to compile and run?
 0. Before compiling, you should find 2 folders: "include"---containing the header files; "src"---containing the cpp files; and also 1 file "CMakeLists.txt" helping generating the make file.
 
 1. press "cmake ." to generate the make file
