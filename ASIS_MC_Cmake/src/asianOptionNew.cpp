@@ -5,6 +5,8 @@
 #include<iostream>
 #include<random>
 #include<functional>
+#include <fstream>
+
 #include"asa241.hpp"
 #include"importanceSamplingAndVectorTools.hpp"
 #include"stratifiedMCClass.hpp"
@@ -56,17 +58,17 @@ int testMC(const char& method,const bool CALL,const int& k,const int& d){
     assert(N[0]==0);
     // get optimal importance sampling shift
     VAR u=getOptimalDirection(S0,r,v,T,k,d,15,CALL);
-    cout << "Optimal Importance Sampling Shift u:" << endl; 
+    // cout << "Optimal Importance Sampling Shift u:" << endl; 
     // payoff function and Random generation Algo
     
     const function<double(VAR)>& payoff=bind(newPayoff,placeholders::_1,u,r,T,d,k,v,S0,CALL);
     const StratifiedRandomGenerateAlgo &generateRandomAlgo=bind(generateStratifiedGaussianVector,placeholders::_1,placeholders::_2,placeholders::_3,placeholders::_4,u);
 
 
-    for (const double &item:u){
-        cout<<item<<' ';
-    }
-    cout<<endl;
+    // for (const double &item:u){
+    //     cout<<item<<' ';
+    // }
+    // cout<<endl;
     // MC
     auto asmc=AdaptiveStratifiedMC<VAR> (I,N,p,payoff,generateRandomAlgo,method);
     asmc.montecarloStratified();
@@ -74,7 +76,23 @@ int testMC(const char& method,const bool CALL,const int& k,const int& d){
     // estimators
     double sigmaStar=asmc.calculateSigmaStar();
     double price=asmc.calculateExpectation();
-
+    
+    if(CALL){
+        cout<<"Call:";
+    }
+    else{
+        cout<<"Put:";
+    }
+      std::ofstream myfile;
+      if(CALL){
+        myfile.open ("call_res.csv",std::ios::app);
+      }
+      else{
+        myfile.open ("put_res.csv",std::ios::app);
+      }
+      myfile<<method<<","<<k<<","<<d<<","<<price<<","<<sigmaStar<<","<<(sigmaStar*sigmaStar)/N[N.size()-1]<<"\n";
+      myfile.close();
+    cout<<"__k:"<<k<<"__d:"<<d<<endl;
     cout<<"price estimator:"<<price<<endl;
     cout<<"sigmaStar:"<<sigmaStar<<endl;
     cout<<"variance of estimator:"<<(sigmaStar*sigmaStar)/N[N.size()-1]<<endl;
@@ -84,102 +102,27 @@ int testMC(const char& method,const bool CALL,const int& k,const int& d){
 
 
 }
-
-int test1(){
-    // Initialize parameters 
-    const double S0=50.,r=0.05,v=0.1,T=1.0,k=55.;
-    const int d=16;
-    bool CALL=false;
-
-    vector<VAR> X;
-    
-   // get optimal importance sampling shift
-    VAR u=getOptimalDirection(S0,r,v,T,k,d,15,CALL);
-    cout << "Optimal Importance Sampling Shift u:" << endl; 
-    // payoff function and Random generation Algo
-    
-    const function<double(VAR)>& payoff=bind(newPayoff,placeholders::_1,u,r,T,d,k,v,S0,CALL);
-    for (const double &item:u){
-        cout<<item<<' ';
-    }
-    cout<<endl;
-    std::default_random_engine de(time(0)); //seed
-    std::normal_distribution<double> nd(0, 1); //mean followed by stdiv 
-    int N=1000000;
-    for(int i=0;i<N;++i){
-        vector<double>xi;
-        for(int j=0;j<d;++j){
-            xi.push_back(nd(de));
-        }
-        X.push_back(xi);
-    }
-    double price=0.0;
-    for(int i=0;i<N;++i){
-        //for(const double& x:X[i]){
-        //    cout<<x<<"__";
-        //}
-        //cout<<price<<" ";
-        price+=payoff(X[i]);
-    }
-    price/=N;
-    cout<<"price estimator:"<<price<<endl;
-   
-    
-    return 0;
-
-
-}
-
-int test2(){
-    // Initialize parameters 
-    const double S0=50.,r=0.05,v=0.1,T=1.0,k=55.;
-    const int d=16;
-    bool CALL=false;
-
-    vector<VAR> X;
-    
-   // get optimal importance sampling shift
-    VAR u(d,0.0);
-    //VAR u=getOptimalDirection(S0,r,v,T,k,d,15,CALL);
-    cout << "Optimal Importance Sampling Shift u:" << endl; 
-    // payoff function and Random generation Algo
-    
-    const function<double(VAR)>& payoff=bind(newPayoff,placeholders::_1,u,r,T,d,k,v,S0,CALL);
-    for (const double &item:u){
-        cout<<item<<' ';
-    }
-    cout<<endl;
-    std::default_random_engine de(time(0)); //seed
-    std::uniform_real_distribution<double> nd(0, 1); //mean followed by stdiv 
-    int N=1000000;
-    for(int i=0;i<N;++i){
-        vector<double>xi;
-        for(int j=0;j<d;++j){
-            xi.push_back(transformToStratifiedNormal(0.0,1.0,nd(de)));
-        }
-        X.push_back(xi);
-    }
-    double price=0.0;
-    for(int i=0;i<N;++i){
-        //for(const double& x:X[i]){
-        //    cout<<x<<"__";
-        //}
-        //cout<<price<<" ";
-        price=double(i)/(double(i)+1.0)*price+payoff(X[i])/(double(i)+1.0);
-    }
-    
-    cout<<"price estimator:"<<price<<endl;
-   
-    
-    return 0;
-
-
-}
-
 int main(){
-//test1();
-//test2();
-testMC('A',false,55,16);
+std::vector<int> Ks{45,50,55};
+std::vector<int> ds{16,64};
+// Call option
+for (auto &K : Ks){
+    for (auto &d : ds){
+        testMC('A',true,K,d);
+        testMC('B',true,K,d);
+    }
+
+}
+// Put option
+for (auto &K : Ks){
+    for (auto &d : ds){
+        testMC('A',false,K,d);
+        testMC('B',false,K,d);
+    }
+
+}
+// testMC('A',false,55,16);
+// testMC('B',false,55,16);
 }
 
 
