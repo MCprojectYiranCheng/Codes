@@ -1,6 +1,6 @@
 # Project of Adaptive Stratification VS Randomized QMC
 ## Code Structures
-1. There are two parts in our project:Adaptive Stratification+ Optimal Importance; Randomized QMC.
+1. There are two parts in our project:Adaptive Stratification+ Optimal Importance Sampling; Randomized QMC. By the nature of our project, the codes for the two parts could be compiled and executed independantly. 
 
 2. The programmes for Adaptive Stratification+ Optimal Importance Sampling are in the folder "./ASIS_MC_Cmake"
 
