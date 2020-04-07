@@ -7,3 +7,6 @@
 3. The programmes for Randomized QMC are in the folder "./RQMC"
 
 4. We use cmake to generate Makefile to compile the programmes; please find the associated "README" files in "./ASIS_MC_Cmake" and in "./RQMC" for compilation and execution.
+
+## Package Requirement
+GSL Package is needed for the part Randomized QMC
