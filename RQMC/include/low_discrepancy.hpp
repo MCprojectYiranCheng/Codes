@@ -97,53 +97,6 @@ protected:
     result_type result;
 };
 
-struct sobol {
-    typedef std::vector<double> result_type;
-    sobol(int dimension) : dimension(dimension), result(dimension) {
-        q = gsl_qrng_alloc(gsl_qrng_sobol, dimension);
-    }
-    sobol(sobol const & o) : dimension(o.dimension) {
-        q = gsl_qrng_clone(o.q);
-        result = o.result;
-    }
-    // constructeur move uniquement en C++11
-    // move constructor
-    sobol(sobol && o) : dimension(o.dimension), q(o.q), result(std::move(o.result)) {
-        o.dimension = 0;
-        o.q = nullptr;
-    }
-    sobol & operator=(sobol const & o) {
-        if (this != &o) {
-            dimension = o.dimension;
-            gsl_qrng_memcpy(q, o.q);
-            result = o.result;
-        }
-        return *this;
-    }
-    //move assignment
-    // operateur move uniquement en C++11
-    sobol & operator=(sobol && o) {
-        if (this != &o) {
-            dimension = o.dimension;
-            q = o.q;
-            result = std::move(o.result);
-            o.dimension = 0;
-            o.q = nullptr;
-        }
-        return *this;
-    }
-    ~sobol() { gsl_qrng_free(q); }
-    result_type operator()() {
-        gsl_qrng_get(q, &(*result.begin()));
-        return result;
-    }
-protected:
-    int dimension;
-    gsl_qrng * q;
-    result_type result;
-};
-
-
 class shifted_halton{
     typedef std::vector<double> result_type;
     result_type shift;
