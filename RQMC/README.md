@@ -18,4 +18,19 @@ make
 ```
 
 ## B. How to use our class RQMC_Gaussian?
-RQMC_Gaussian is used to do Randomized QMC for solving the problem in the for $ \sum_{\forall i}{x_i^{2}} $
+RQMC_Gaussian is used to do Randomized QMC for solving the problem in the form of E(f(X)) where X is a d-dimension random vertor whose law is N(0,I_d) where I_d is a d-dimension identity matrix. So in order to use our class, and f is a fonction from R^d -> R. So we need to know the defintion of f in our specific problem in order to use RQMC_Gaussian.
+1. The type of f function needs to be std::function<double(std::vector<double>)>
+2. N,I are the length of low discrepancy sequence and the number of copied of shifted sequence.
+3. d is the dimension of problem
+4. gen is a random generator
+Then we can declare an object of RQMC_Gaussian class by `RQMC_Gaussian object(I,N,d,f,gen)`. Once we execute `object()`, it will do the randomized QMC job. Then the results are saved in the memeber of object, `object.estimator` and `object.half_CI`. We can use the following `to_csv` function to save the results into a csv file.
+
+
+``` C++
+void to_csv(std::string dir, const RQMC_Gaussian rqmc){
+  std::ofstream myfile;
+  myfile.open (dir);
+  myfile << rqmc <<"\n";
+  myfile.close();
+}
+```
