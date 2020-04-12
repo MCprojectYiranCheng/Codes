@@ -10,6 +10,7 @@ In the main.cpp, we have wrote the code to use our class to generate the data fo
 ## A. Step by step guide
 Run the following bash code in the terminal under the directory of `Codes/RQMC/` in order to run our code for doing randomized QMC job.
 ```Bash
+mkdir data
 mdkir build
 cd build
 cmake ..
