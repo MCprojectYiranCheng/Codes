@@ -61,15 +61,15 @@ double payoff_arithematic_Asian_option(std::vector<double> X, double T, int d, d
 
 
 int main() {
-  std::random_device rd;
-  auto seed = rd();
-  std::mt19937 gen(seed);
-
+  // std::random_device rd;
+  // auto seed = rd();
+  // std::mt19937 gen(seed);
+  std::mt19937 gen(2020);
   std::vector<double> x;
 
-  int N;
-  std::cout << "Please input the N :" << '\n';
-  std::cin >> N;
+  // int N;
+  // std::cout << "Please input the N :" << '\n';
+  // std::cin >> N;
   // QMC_Gaussian rqmc_g(100,N,1,f,gen);
   // rqmc_g();
   //
@@ -77,6 +77,16 @@ int main() {
   //
   // std::string out_dir = "../data/RQMC.csv";
   // to_csv(out_dir,rqmc_g);
+
+  int I = 100;
+  int N = 10000;
+  //Firstly generate the RQMC results for a simple guasisan
+  RQMC_Gaussian rqmc_g(I,N,1,f,gen);
+  rqmc_g();
+  std::cout << "Expectation results are: \n" << rqmc_g <<'\n';
+  std::string out_dir = "../data2/normal_1000_1000.csv";
+  to_csv(out_dir,rqmc_g);
+
 
   double T=1.0;
   //int d=16;
@@ -94,10 +104,10 @@ int main() {
   for(int i=0;i<2;i++){
     for(int j=0;j<3;j++){
         auto f2 = std::bind(payoff_arithematic_Asian_option,std::placeholders::_1,T,d[i],s0,K[j],V,r,is_call);
-        RQMC_Gaussian pricing(100,N,d[i],f2,gen);
+        RQMC_Gaussian pricing(I,N,d[i],f2,gen);
         pricing();
         std::cout << "Pricing results are: \n" << pricing <<'\n';
-        std::string out_dir = "../data/Call_"+std::to_string(d[i])+"_"+std::to_string((int)K[j])+".csv";
+        std::string out_dir = "../data2/Call_"+std::to_string(d[i])+"_"+std::to_string((int)K[j])+".csv";
         to_csv(out_dir,pricing);
     }
   }
@@ -106,10 +116,10 @@ int main() {
     for(int i=0;i<2;i++){
       for(int j=0;j<3;j++){
           auto f2 = std::bind(payoff_arithematic_Asian_option,std::placeholders::_1,T,d[i],s0,K[j],V,r,is_call);
-          RQMC_Gaussian pricing(100,N,d[i],f2,gen);
+          RQMC_Gaussian pricing(I,N,d[i],f2,gen); //I = 100
           pricing();
           std::cout << "Pricing results are: \n" << pricing <<'\n';
-          std::string out_dir = "../data/put_"+std::to_string(d[i])+"_"+std::to_string((int)K[j])+".csv";
+          std::string out_dir = "../data2/put_"+std::to_string(d[i])+"_"+std::to_string((int)K[j])+".csv";
           to_csv(out_dir,pricing);
       }
     }
