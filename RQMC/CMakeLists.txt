@@ -18,8 +18,8 @@ set(LIBS_GSL ${GSL_LIBRARIES} ${GSLCBLAS_LIBRARIES})
 include_directories(${RQMC_INCLUDES} ${CMAKE_SYSTEM_INCLUDE_PATH})
 include_directories(${GSL_INCLUDE_DIRS} ${GSLCBLAS_INCLUDE_DIRS})
 
-add_executable(test_beta "${RQMC_SOURCES}/main.cpp" "${RQMC_SOURCES}/low_discrepancy.cpp" "${RQMC_SOURCES}/Randomized_MC.cpp")
+add_executable(RMQC "${RQMC_SOURCES}/main.cpp" "${RQMC_SOURCES}/low_discrepancy.cpp" "${RQMC_SOURCES}/Randomized_MC.cpp")
 
 
-target_link_libraries(test_beta ${LIBS_GSL})
+target_link_libraries(RQMC ${LIBS_GSL})
 
