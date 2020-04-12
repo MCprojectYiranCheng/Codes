@@ -8,7 +8,7 @@ This part is the work on randomized QMC. To do our job, we have created mainly t
 In the main.cpp, we have wrote the code to use our class to generate the data for doing a randomized QMC for estimating a standard gaussian varible's mean and for pricing the arithmemaic Asian call and put option.
 
 ## A. Step by step guide
-Running the following bash code in the terminal in order to run our code for doing randomized QMC job.
+Running the following bash code in the terminal under the directory of `Codes/RQMC/` in order to run our code for doing randomized QMC job.
 ```Bash
 mdkir build
 cd build
